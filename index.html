@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad Interactiva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(https://images.pexels.com/photos/28728726/pexels-photo-28728726/free-photo-of-iconic-view-of-big-ben-and-houses-of-parliament-in-london.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2); /* Reemplaza con una URL de fondo de Inglaterra */
+            background-size: cover;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .result {
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .hint {
+            font-size: 0.9em;
+            color: gray;
+            margin-left: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            font-weight: bold;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .submit-button {
+            background-color: green;
+        }
+        .redo-button {
+            background-color: blue;
+            color: white;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Actividad Interactiva</h1>
+        
+        <h2>Ejercicio 1: Completa las siguientes descripciones de personas</h2>
+        <p>Usa la información del siguiente texto para completar los espacios:</p>
+        <p><strong>The students</strong> are of medium height and have black hair. They are funny and are wearing sneakers and jackets.</p>
+        <p><strong>Tim</strong> is short and has brown eyes. He is very shy and is wearing jeans and a blue t-shirt.</p>
+        <p><strong>Kate</strong> is tall and has blonde hair. She is very friendly and is wearing a red dress.</p>
+        
+        <form id="exerciseForm">
+            <p>Ejercicio 1a. <input type="text" id="q1-1"> are of medium height and have <input type="text" id="q1-2"> hair. They are <input type="text" id="q1-3"> and are wearing <input type="text" id="q1-4">.</p>
+            <p>Ejercicio 1b. <input type="text" id="q2-1"> is short and has <input type="text" id="q2-2"> eyes. He is very <input type="text" id="q2-3"> and is wearing <input type="text" id="q2-4">.</p>
+            <p>Ejercicio 1c. <input type="text" id="q3-1"> is tall and has <input type="text" id="q3-2"> hair. She is very <input type="text" id="q3-3"> and is wearing <input type="text" id="q3-4">.</p>
+
+            <h2>Ejercicio 2: Ordena las palabras para formar oraciones correctas</h2>
+            <p>Escribe la oración completa en el orden correcto.</p>
+            
+            <p>Ejercicio 2a. <input type="text" id="q4"> <span class="hint">is / She / tall / very</span></p>
+            <p>Ejercicio 2b. <input type="text" id="q5"> <span class="hint">has / He / black / hair</span></p>
+            <p>Ejercicio 2c. <input type="text" id="q6"> <span class="hint">blue / eyes / are / Her</span></p>
+            <p>Ejercicio 2d. <input type="text" id="q7"> <span class="hint">short / is / and / He / thin</span></p>
+            <p>Ejercicio 2e. <input type="text" id="q8"> <span class="hint">They / blonde / hair / have</span></p>
+            <p>Ejercicio 2f. <input type="text" id="q9"> <span class="hint">wearing / glasses / She / is</span></p>
+            <p>Ejercicio 2g. <input type="text" id="q10"> <span class="hint">brown / He / has / eyes</span></p>
+            <p>Ejercicio 2h. <input type="text" id="q11"> <span class="hint">are / Your / friends / tall</span></p>
+            <p>Ejercicio 2i. <input type="text" id="q12"> <span class="hint">curly / She / hair / has</span></p>
+            <p>Ejercicio 2j. <input type="text" id="q13"> <span class="hint">My / brother / is / strong</span></p>
+
+            <button type="button" class="button submit-button" onclick="checkAnswers()">Enviar respuestas</button>
+            <button type="button" class="button redo-button" onclick="resetForm()">Rehacer</button>
+        </form>
+        
+        <h2>Resultados:</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            // Ejercicio 1
+            'q1-1': 'The students', 'q1-2': 'black', 'q1-3': 'funny', 'q1-4': 'sneakers and jackets',
+            'q2-1': 'Tim', 'q2-2': 'brown', 'q2-3': 'shy', 'q2-4': 'jeans and a blue t-shirt',
+            'q3-1': 'Kate', 'q3-2': 'blonde', 'q3-3': 'friendly', 'q3-4': 'a red dress',
+            // Ejercicio 2
+            'q4': 'she is very tall',
+            'q5': 'he has black hair',
+            'q6': 'her eyes are blue',
+            'q7': 'he is short and thin',
+            'q8': 'they have blonde hair',
+            'q9': 'she is wearing glasses',
+            'q10': 'he has brown eyes',
+            'q11': 'your friends are tall',
+            'q12': 'she has curly hair',
+            'q13': 'my brother is strong'
+        };
+
+        function checkAnswers() {
+            let totalQuestions = Object.keys(correctAnswers).length;
+            let correctCount = 0;
+            let resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Limpiar resultados anteriores
+
+            for (let key in correctAnswers) {
+                let userAnswer = document.getElementById(key).value.trim().toLowerCase();
+                let correctAnswer = correctAnswers[key].toLowerCase();
+
+                if (userAnswer === correctAnswer) {
+                    correctCount++;
+                    resultsDiv.innerHTML += `<p class="result correct">Pregunta ${key}: ${userAnswer} ✓</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p class="result incorrect">Pregunta ${key}: ${userAnswer} ✗ - Respuesta correcta: ${correctAnswers[key]}</p>`;
+                }
+            }
+
+            let score = (correctCount / totalQuestions) * 100;
+            resultsDiv.innerHTML += `<h3>Nota final: ${score.toFixed(2)}%</h3>`;
+        }
+
+        function resetForm() {
+            document.getElementById("exerciseForm").reset();
+            document.getElementById("results").innerHTML = '';
+        }
+    </script>
+</body>
+</html>
